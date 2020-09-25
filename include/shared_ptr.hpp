@@ -47,6 +47,7 @@ template <typename T>
 SharedPtr<T>::SharedPtr(const SharedPtr &r) : counter{nullptr} {
   pointer = r.pointer;
   counter = r.counter;
+  (*counter)++;
 }
 template <typename T>
 SharedPtr<T>::SharedPtr(SharedPtr &&r) noexcept : counter{nullptr} {
