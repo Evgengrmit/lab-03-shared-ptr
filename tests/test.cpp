@@ -134,13 +134,25 @@ TEST(SharedPtr, BoolCheck)  //+
 
   ASSERT_EQ(ptr2.operator bool(), true);
 }
-//TEST(SharedPtr, ThisCopyAssigment) {
-//  SharedPtr ptr1{new int{5555}};
-//  ptr1 = ptr1;
-//  EXPECT_EQ(*ptr1, 5555);
-//}
-//TEST(SharedPtr, ThisMoveAssigment) {
-//  SharedPtr ptr1{new int{5555}};
-//  ptr1 = std::move(ptr1);
-//  EXPECT_EQ(*ptr1, 5555);
-//}
+template <class T>
+auto selfCopyAssignment(T& value1, T& value2) -> T& {
+  value1 = value2;
+  return value1;
+}
+TEST(SharedPtr, ThisCopyAssigment) {
+  SharedPtr ptr1{new int{5555}};
+
+  EXPECT_EQ(*selfCopyAssignment(ptr1, ptr1), 5555);
+  EXPECT_EQ(selfCopyAssignment<SharedPtr<int>>(ptr1, ptr1).use_count(), 1);
+}
+template <class T>
+auto selfMoveAssignment(T& value1, T& value2) -> T& {
+  value1 = std::move(value2);
+  return value1;
+}
+TEST(SharedPtr, ThisMoveAssigment) {
+  SharedPtr ptr1{new int{4444}};
+
+  EXPECT_EQ(*selfMoveAssignment(ptr1, ptr1), 4444);
+  EXPECT_EQ(selfMoveAssignment(ptr1, ptr1).use_count(), 1);
+}
