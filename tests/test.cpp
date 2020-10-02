@@ -70,8 +70,8 @@ TEST(SharedPtr, Dereferencing) {
   EXPECT_EQ(*p, "Hi");
 }
 struct Foo {
-  Foo(int in) : a(in) {}
-  int get() const { return a; }
+  explicit Foo(int in) : a(in) {}
+  [[nodiscard]] int get() const { return a; }
   int a;
 };
 
