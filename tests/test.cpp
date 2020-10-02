@@ -69,12 +69,16 @@ TEST(SharedPtr, Dereferencing) {
 
   EXPECT_EQ(*p, "Hi");
 }
+struct Foo {
+  Foo(int in) : a(in) {}
+  int get() const { return a; }
+  int a;
+};
 
 TEST(SharedPtr, AccessThroughPointer) {
-  SharedPtr p(new int{516237});
-  SharedPtr v(new SharedPtr<int>{p});
+  SharedPtr<Foo> ptr(new Foo{516237});
 
-  ASSERT_EQ(*v->get(), 516237);
+  ASSERT_EQ(ptr->get(), 516237);
 }
 TEST(SharedPtr, ResetEmpty) {
   SharedPtr p(new double{2.2});
